@@ -1,0 +1,230 @@
+{
+  "id": "day1-immigration",
+  "title": "입국 심사 탈출",
+  "country": { "id": "new-zealand", "name": "뉴질랜드" },
+  "place": { "id": "airport", "name": "공항" },
+  "intro": "뉴질랜드 공항에 도착했지만 여권이 잠긴 서랍 안에 있습니다. 안내판, 입국신고서, 안내방송에서 단서 세 개를 모으세요. 서랍 코드는 데스크 번호, 체류 개월 수, 그룹 번호를 차례로 이은 세 자리입니다. 서랍을 연 뒤 심사관에게 방문 목적, 체류 기간, 숙소를 말하면 통과합니다.",
+  "expressions": [
+    {
+      "en": "What is the purpose of your visit?",
+      "ko": "방문 목적이 무엇인가요?",
+      "usage": "입국 심사관이 왜 왔는지 물을 때 쓰는 질문입니다."
+    },
+    {
+      "en": "I'm here to study.",
+      "ko": "공부하러 왔습니다.",
+      "usage": "어학연수나 학교 입학처럼 공부 목적일 때 짧게 답합니다."
+    },
+    {
+      "en": "How long will you stay?",
+      "ko": "얼마나 머무를 건가요?",
+      "usage": "체류 기간을 물을 때 씁니다."
+    },
+    {
+      "en": "Where will you be staying?",
+      "ko": "어디에 머무를 건가요?",
+      "usage": "숙소나 머무를 도시를 물을 때 씁니다."
+    },
+    {
+      "en": "Could you say that again?",
+      "ko": "다시 한 번 말해 주시겠어요?",
+      "usage": "말이 너무 빠르거나 잘 안 들릴 때 다시 부탁합니다."
+    },
+    {
+      "en": "I'd like to fill out this form.",
+      "ko": "이 서류를 작성하고 싶습니다.",
+      "usage": "입국신고서처럼 서류를 직접 쓰고 싶을 때 씁니다."
+    }
+  ],
+  "vocabulary": [
+    { "word": "purpose", "meaning": "목적" },
+    { "word": "study", "meaning": "공부" },
+    { "word": "stay", "meaning": "머무르다" },
+    { "word": "homestay", "meaning": "홈스테이" },
+    { "word": "passport", "meaning": "여권" },
+    { "word": "officer", "meaning": "심사관" },
+    { "word": "form", "meaning": "서류" },
+    { "word": "desk", "meaning": "데스크" },
+    { "word": "arrival", "meaning": "도착" },
+    { "word": "group", "meaning": "그룹" }
+  ],
+  "scene": {
+    "backgroundImage": "placeholder",
+    "hotspots": [
+      {
+        "id": "wall-sign",
+        "label": "벽 안내판",
+        "x": 18,
+        "y": 30,
+        "type": "read",
+        "text": "Welcome to New Zealand. If you are here to study, please go to Desk 4. Have your passport ready before you speak to an officer.",
+        "question": "유학생은 몇 번 데스크로 가야 하나요?",
+        "choices": [
+          { "id": "desk-2", "text": "Desk 2" },
+          { "id": "desk-4", "text": "Desk 4" },
+          { "id": "desk-6", "text": "Desk 6" }
+        ],
+        "answer": "desk-4",
+        "clueId": "desk",
+        "clueValue": "4",
+        "hints": [
+          "학생은 어느 데스크로 가면 되는지 묻고 있어요.",
+          "D로 시작해요.",
+          "Desk 4"
+        ]
+      },
+      {
+        "id": "arrival-card",
+        "label": "입국신고서",
+        "x": 48,
+        "y": 66,
+        "type": "read",
+        "text": "New Zealand Arrival Card\nFamily name: Kim\nPurpose of visit: Study\nHow long will you stay? 3 months\nWhere will you be staying? A homestay in Auckland\nHelp card: If you need this paper, say, \"I'd like to fill out this form.\"",
+        "question": "신고서에 적힌 체류 기간은 얼마인가요?",
+        "choices": [
+          { "id": "stay-1", "text": "1 month" },
+          { "id": "stay-3", "text": "3 months" },
+          { "id": "stay-6", "text": "6 months" }
+        ],
+        "answer": "stay-3",
+        "clueId": "months",
+        "clueValue": "3",
+        "hints": [
+          "여기에 얼마나 머물 계획인지 묻고 있어요.",
+          "3으로 시작해요.",
+          "3 months"
+        ]
+      },
+      {
+        "id": "speaker",
+        "label": "안내방송",
+        "x": 80,
+        "y": 24,
+        "type": "listen",
+        "text": "This is an airport announcement. Students, please keep your passport and arrival card ready. Your group number is 8. Wait until group 8 is called, then walk to the immigration desk.",
+        "question": "안내방송에서 말한 그룹 번호는 무엇인가요?",
+        "choices": [
+          { "id": "group-3", "text": "3" },
+          { "id": "group-5", "text": "5" },
+          { "id": "group-8", "text": "8" }
+        ],
+        "answer": "group-8",
+        "clueId": "group",
+        "clueValue": "8",
+        "hints": [
+          "방송에서 부른 조 번호를 묻고 있어요.",
+          "8로 시작해요.",
+          "8"
+        ]
+      },
+      {
+        "id": "drawer",
+        "label": "서랍",
+        "x": 70,
+        "y": 78,
+        "type": "lock",
+        "prompt": "코드는 데스크 번호, 체류 개월 수, 그룹 번호를 차례로 이은 세 자리입니다.",
+        "answer": "438",
+        "requires": ["desk", "months", "group"]
+      }
+    ]
+  },
+  "dialogue": {
+    "npcName": "Officer Patel",
+    "goal": "방문 목적, 체류 기간, 숙소를 자연스러운 영어로 말하세요.",
+    "slots": [
+      { "id": "purpose", "label": "방문 목적" },
+      { "id": "duration", "label": "체류 기간" },
+      { "id": "lodging", "label": "숙소" }
+    ],
+    "turns": [
+      {
+        "id": "ask-purpose",
+        "npcText": "Hello. What is the purpose of your visit?",
+        "choices": [
+          {
+            "id": "purpose-good",
+            "text": "I'm here to study.",
+            "slot": "purpose",
+            "quality": "good",
+            "naturalVersion": "I'm here to study."
+          },
+          {
+            "id": "purpose-awkward",
+            "text": "Study. I go school.",
+            "slot": "purpose",
+            "quality": "awkward",
+            "naturalVersion": "I'm here to study."
+          },
+          {
+            "id": "purpose-wrong",
+            "text": "I want holiday fun.",
+            "slot": "purpose",
+            "quality": "wrong",
+            "naturalVersion": "I'm here to study."
+          }
+        ]
+      },
+      {
+        "id": "ask-duration",
+        "npcText": "How long will you stay?",
+        "choices": [
+          {
+            "id": "duration-good",
+            "text": "I'll stay for three months.",
+            "slot": "duration",
+            "quality": "good",
+            "naturalVersion": "I'll stay for three months."
+          },
+          {
+            "id": "duration-awkward",
+            "text": "Three month stay.",
+            "slot": "duration",
+            "quality": "awkward",
+            "naturalVersion": "I'll stay for three months."
+          },
+          {
+            "id": "duration-wrong",
+            "text": "I stay forever.",
+            "slot": "duration",
+            "quality": "wrong",
+            "naturalVersion": "I'll stay for three months."
+          }
+        ]
+      },
+      {
+        "id": "ask-lodging",
+        "npcText": "Where will you be staying?",
+        "choices": [
+          {
+            "id": "lodging-good",
+            "text": "I'll be staying at a homestay in Auckland.",
+            "slot": "lodging",
+            "quality": "good",
+            "naturalVersion": "I'll be staying at a homestay in Auckland."
+          },
+          {
+            "id": "lodging-awkward",
+            "text": "Could you say that again? Homestay, Auckland.",
+            "slot": "lodging",
+            "quality": "awkward",
+            "naturalVersion": "Could you say that again, please? I'll be staying at a homestay in Auckland."
+          },
+          {
+            "id": "lodging-wrong",
+            "text": "I'd like to fill out this form.",
+            "slot": "lodging",
+            "quality": "wrong",
+            "naturalVersion": "I'll be staying at a homestay in Auckland."
+          }
+        ]
+      }
+    ]
+  },
+  "exit": {
+    "requiredClueIds": ["desk", "months", "group"],
+    "requiredLockId": "drawer",
+    "requireDialogue": true,
+    "message": "서랍에서 여권을 찾았습니다. 심사관의 질문을 마치고 입국 심사를 통과했습니다."
+  }
+}

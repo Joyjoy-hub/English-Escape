@@ -1,0 +1,21 @@
+{
+  "countries": [
+    { "id": "new-zealand", "name": "뉴질랜드" },
+    { "id": "australia", "name": "호주" },
+    { "id": "united-states", "name": "미국" },
+    { "id": "united-kingdom", "name": "영국" },
+    { "id": "canada", "name": "캐나다" },
+    { "id": "ireland", "name": "아일랜드" },
+    { "id": "singapore", "name": "싱가포르" }
+  ],
+  "places": [
+    { "id": "airport", "name": "공항" },
+    { "id": "school", "name": "학교" },
+    { "id": "lodging", "name": "숙소" },
+    { "id": "restaurant", "name": "식당" },
+    { "id": "cafe", "name": "카페" },
+    { "id": "mart", "name": "마트" },
+    { "id": "hospital", "name": "병원" },
+    { "id": "bank", "name": "은행" }
+  ]
+}

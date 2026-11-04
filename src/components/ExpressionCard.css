@@ -1,0 +1,57 @@
+.expression-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 16px;
+  padding: 20px 16px;
+  border: 1px solid var(--brass-edge);
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.expression-en {
+  margin: 0;
+  color: var(--ink);
+  font-family: Cinzel, 'Times New Roman', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.expression-ko,
+.expression-usage {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.expression-ko {
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.expression-usage {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.expression-speak {
+  align-self: stretch;
+  min-height: 48px;
+  margin-top: 4px;
+  padding: 12px 16px;
+  border: 1px solid var(--brass-edge);
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--brass-light) 0%, var(--brass) 100%);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.expression-speak:active {
+  opacity: 0.8;
+}

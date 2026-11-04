@@ -1,0 +1,162 @@
+.result-page {
+  padding-bottom: 32px;
+}
+
+.result-page h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.result-stars {
+  display: flex;
+  gap: 6px;
+  margin: 10px 0 0;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.result-stars span {
+  color: #d9d1c4;
+}
+
+.result-stars span.is-on {
+  color: #c9892d;
+}
+
+.result-section {
+  margin-top: 28px;
+}
+
+.result-section h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.result-words {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.result-words li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  min-height: 48px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--brass-edge);
+  background: var(--card);
+}
+
+.result-words strong {
+  color: var(--ink);
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+.result-words span {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.result-corrections {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.result-correction,
+.result-perfect {
+  margin: 0;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--brass-edge);
+  background: var(--card);
+  overflow-wrap: anywhere;
+}
+
+.result-correction {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.result-correction span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.result-correction p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+.result-correction-arrow {
+  color: var(--brass);
+  font-weight: 700;
+}
+
+.result-perfect {
+  color: var(--success);
+  font-weight: 700;
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.result-actions button {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 12px;
+  border: 1px solid var(--brass-edge);
+  background: linear-gradient(180deg, var(--brass-light) 0%, var(--brass) 100%);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.result-actions button:disabled {
+  background: #e8dcc4;
+  color: var(--muted);
+  cursor: default;
+}
+
+.result-soon {
+  margin: -4px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 380px) {
+  .result-page {
+    padding: 20px 16px 28px;
+  }
+
+  .result-page h1,
+  .result-stars {
+    font-size: 28px;
+  }
+}

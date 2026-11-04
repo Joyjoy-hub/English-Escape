@@ -1,0 +1,258 @@
+.dialogue-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: min(100%, 480px);
+  height: 100svh;
+  margin: 0 auto;
+  background: rgba(246, 234, 208, 0.94);
+  border-left: 1px solid var(--brass-edge);
+  border-right: 1px solid var(--brass-edge);
+}
+
+.dialogue-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: max(16px, env(safe-area-inset-top)) 16px 0;
+}
+
+.dialogue-heading {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+
+.dialogue-header a.home-button {
+  margin-bottom: 0;
+}
+
+.dialogue-header h1 {
+  margin: 0;
+  padding-bottom: 0;
+  background: none;
+  font-size: 22px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.dialogue-goal {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.dialogue-kit {
+  flex: 0 0 auto;
+  max-width: 46%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 12px;
+  border: 1px solid var(--brass-edge);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.dialogue-goals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0 16px 12px;
+  list-style: none;
+}
+
+.dialogue-goals li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.dialogue-goals li.is-done {
+  background: var(--success);
+  color: var(--cream);
+  font-weight: 700;
+}
+
+.dialogue-chat {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 8px 16px 16px;
+  list-style: none;
+}
+
+.dialogue-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  max-width: 85%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  overflow-wrap: anywhere;
+}
+
+.dialogue-bubble p {
+  margin: 0;
+  color: inherit;
+}
+
+.dialogue-bubble.is-npc {
+  align-self: flex-start;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--brass-edge);
+  border-bottom-left-radius: 6px;
+}
+
+.dialogue-bubble.is-user {
+  align-self: flex-end;
+  background: var(--wood);
+  color: var(--cream);
+  border-bottom-right-radius: 6px;
+}
+
+.dialogue-speaker {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dialogue-speak {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #e8dcc4;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dialogue-composer {
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: #ead9b6;
+}
+
+.dialogue-empty {
+  margin: 16px;
+  color: var(--muted);
+}
+
+.dialogue-stamp {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 148px;
+  height: 148px;
+  border: 6px solid var(--stamp);
+  border-radius: 50%;
+  color: var(--stamp);
+  background: rgba(246, 234, 208, 0.92);
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  animation: dialogue-stamp-in 0.8s ease-out both;
+}
+
+@keyframes dialogue-stamp-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.7) rotate(-18deg);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.92) rotate(-8deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(-12deg);
+  }
+}
+
+.dialogue-exit {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #1a120c;
+  animation: dialogue-exit-in 0.45s ease-out both;
+}
+
+.dialogue-exit p {
+  margin: 0;
+  color: var(--cream);
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+@keyframes dialogue-exit-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialogue-stamp {
+    animation: none;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-12deg);
+  }
+
+  .dialogue-exit {
+    animation: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .dialogue-header h1 {
+    font-size: 20px;
+  }
+
+  .dialogue-stamp {
+    width: 124px;
+    height: 124px;
+    font-size: 32px;
+  }
+
+  .dialogue-exit p {
+    font-size: 32px;
+  }
+}

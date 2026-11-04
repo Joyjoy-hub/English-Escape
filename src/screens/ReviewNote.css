@@ -1,0 +1,85 @@
+.review-note {
+  padding-bottom: 32px;
+}
+
+.review-note h1 {
+  margin: 0 0 16px;
+  font-size: 28px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.review-empty {
+  margin: 0;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.review-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid var(--brass-edge);
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.review-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.review-mine,
+.review-natural {
+  margin: 0;
+  color: var(--ink);
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+.review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.review-actions button {
+  flex: 1 1 140px;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.review-actions button:first-child {
+  border: 1px solid var(--brass-edge);
+  background: linear-gradient(180deg, var(--brass-light) 0%, var(--brass) 100%);
+  color: var(--ink);
+}
+
+.review-actions button:last-child {
+  background: #e8dcc4;
+  color: var(--ink);
+}
+
+@media (max-width: 380px) {
+  .review-note h1 {
+    font-size: 24px;
+  }
+}
