@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { PageFrame } from '../components/PageFrame'
 import { stepPath } from '../components/StepGuard'
 import { countryMapPins } from '../data/countryMap'
 import { destinations } from '../data/destinations'
+import { placeCards } from '../data/placeMap'
 import { missions } from '../data/missions'
 import { useGameStore } from '../store/gameStore'
 import type { Destination, Mission } from '../types/mission'
@@ -18,24 +18,6 @@ function savedCountryId(mission: Mission) {
   return mission.country?.id ?? (mission.id === 'day1-immigration' ? 'new-zealand' : null)
 }
 
-const englishLabel: Record<string, string> = {
-  'new-zealand': 'New Zealand',
-  australia: 'Australia',
-  'united-states': 'United States',
-  'united-kingdom': 'United Kingdom',
-  canada: 'Canada',
-  ireland: 'Ireland',
-  singapore: 'Singapore',
-  airport: 'Airport',
-  school: 'School',
-  lodging: 'Lodging',
-  restaurant: 'Restaurant',
-  cafe: 'Cafe',
-  mart: 'Market',
-  hospital: 'Hospital',
-  bank: 'Bank',
-}
-
 export function HomePage() {
   const navigate = useNavigate()
   const savedMission = useGameStore((state) => state.mission)
@@ -47,6 +29,7 @@ export function HomePage() {
   const [focusedCountryId, setFocusedCountryId] = useState<string | null>('new-zealand')
   const [closedPlaceId, setClosedPlaceId] = useState<string | null>(null)
   const country = destinations.countries.find((item) => item.id === countryId) ?? null
+  const countryPin = countryMapPins.find((pin) => pin.id === countryId) ?? null
   const focusedPin = countryMapPins.find((pin) => pin.id === focusedCountryId) ?? null
   const focusedCountry = destinations.countries.find((item) => item.id === focusedCountryId) ?? null
   const canContinue = Boolean(
@@ -86,51 +69,67 @@ export function HomePage() {
 
   if (!country) {
     return (
-      <main className="country-map-page">
-        <header className="country-map-header">
-          <p className="page-kicker">English Escape</p>
-          <h1>국가 선택</h1>
-          <p>지도에서 여행할 국가를 고르세요.</p>
-        </header>
+      <main className="dest-screen">
+        <div className="dest-map-scroll">
+          <div className="dest-map" role="group" aria-label="세계 지도">
+            <img className="dest-map-image" src="/world-map.jpg" alt="" />
+            <div className="dest-map-veil" aria-hidden="true" />
 
-        <div className="country-map-stage">
-          <div className="country-map-scroll">
-            <div className="country-map-board" role="group" aria-label="세계 지도">
-              <img className="country-map-image" src="/world-map.jpg" alt="" />
-              {countryMapPins.map((pin) => {
-                const label = destinations.countries.find((item) => item.id === pin.id)?.name ?? pin.en
-                const selected = pin.id === focusedCountryId
-                return (
-                  <button
-                    key={pin.id}
-                    type="button"
-                    className={selected ? 'country-map-pin is-selected' : 'country-map-pin'}
-                    style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
-                    aria-pressed={selected}
-                    aria-label={label}
-                    onClick={() => setFocusedCountryId(pin.id)}
-                  >
-                    <span className="country-map-pin-dot" aria-hidden="true" />
-                    <span className="country-map-pin-label">
-                      <span className="country-map-pin-en">{pin.en}</span>
-                      <span>{label}</span>
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
+            {focusedPin ? (
+              <span
+                className="dest-plane"
+                style={{ left: `${focusedPin.x}%`, top: `${focusedPin.y}%` }}
+                aria-hidden="true"
+              >
+                ✈
+              </span>
+            ) : null}
+
+            {countryMapPins.map((pin) => {
+              const label = destinations.countries.find((item) => item.id === pin.id)?.name ?? pin.en
+              const selected = pin.id === focusedCountryId
+              return (
+                <button
+                  key={pin.id}
+                  type="button"
+                  className={selected ? 'dest-pin is-selected' : 'dest-pin'}
+                  style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
+                  aria-pressed={selected}
+                  aria-label={label}
+                  onClick={() => setFocusedCountryId(pin.id)}
+                >
+                  <span className="dest-pin-ring" aria-hidden="true">
+                    <img src={pin.landmark} alt="" />
+                  </span>
+                  <span className="dest-pin-name">{label}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
 
+        <header className="dest-top">
+          <p className="dest-brand">English Escape</p>
+          <div className="dest-top-copy">
+            <h1>국가 선택</h1>
+            <p>지도의 나라를 눌러 여행을 시작하세요</p>
+          </div>
+        </header>
+
         {focusedPin && focusedCountry ? (
-          <section className="country-map-card" aria-live="polite">
-            <p className="country-map-card-en">{focusedPin.en}</p>
-            <h2>{focusedCountry.name}</h2>
-            <p className="country-map-card-tag">{focusedPin.tagline}</p>
-            <p className="country-map-card-blurb">{focusedPin.blurb}</p>
-            <button type="button" className="country-map-confirm" onClick={() => chooseCountry(focusedPin.id)}>
-              이 나라로 가기
-            </button>
+          <section className="dest-panel" aria-live="polite">
+            <div className="dest-panel-photo">
+              <img src={focusedPin.landmark} alt="" />
+            </div>
+            <div className="dest-panel-body">
+              <p className="dest-panel-en">{focusedPin.en}</p>
+              <h2>{focusedCountry.name}</h2>
+              <p className="dest-panel-tag">{focusedPin.tagline}</p>
+              <p className="dest-panel-blurb">{focusedPin.blurb}</p>
+              <button type="button" className="dest-panel-cta" onClick={() => chooseCountry(focusedPin.id)}>
+                모험 시작하기
+              </button>
+            </div>
           </section>
         ) : null}
       </main>
@@ -138,44 +137,73 @@ export function HomePage() {
   }
 
   return (
-    <PageFrame title="장소 선택" description={`${country.name}에서 갈 장소를 고르세요.`}>
-      {canContinue ? (
-        <div className="home-continue">
-          <p>이어서 할 진행이 있어요</p>
-          <button type="button" onClick={() => navigate(stepPath[step])}>
-            이어하기
-          </button>
+    <main className="place-screen">
+      <header className="place-hero">
+        {countryPin ? <img className="place-hero-image" src={countryPin.landmark} alt="" /> : null}
+        <div className="place-hero-veil" aria-hidden="true" />
+        <button
+          type="button"
+          className="place-back"
+          aria-label="지도로 돌아가기"
+          onClick={() => {
+            setClosedPlaceId(null)
+            setCountryId(null)
+          }}
+        >
+          ←
+        </button>
+        <div className="place-hero-copy">
+          <p className="place-brand">English Escape</p>
+          <p className="place-country-en">{countryPin?.en ?? country.id}</p>
+          <h1>장소 선택</h1>
+          <p>{country.name}에서 갈 장소를 고르세요</p>
         </div>
-      ) : null}
-      <div className="home-choices">
-        {destinations.places.map((place) => {
-          const open = missionFor(country.id, place.id) !== null
-          return (
-            <button key={place.id} type="button" className="home-choice" onClick={() => choosePlace(place)}>
-              <span className="home-choice-copy">
-                <span className="home-choice-en">{englishLabel[place.id] ?? place.id}</span>
-                <span>{place.name}</span>
-              </span>
-              {open ? null : <span className="home-choice-note">곧 공개돼요</span>}
+      </header>
+
+      <div className="place-sheet">
+        {canContinue ? (
+          <div className="place-continue">
+            <div>
+              <p className="place-continue-label">진행 중</p>
+              <p>이어서 할 미션이 있어요</p>
+            </div>
+            <button type="button" onClick={() => navigate(stepPath[step])}>
+              이어하기
             </button>
-          )
-        })}
+          </div>
+        ) : null}
+
+        <div className="place-grid">
+          {destinations.places.map((place) => {
+            const card = placeCards.find((item) => item.id === place.id)
+            const open = missionFor(country.id, place.id) !== null
+            return (
+              <button
+                key={place.id}
+                type="button"
+                className={open ? 'place-card is-open' : 'place-card is-locked'}
+                onClick={() => choosePlace(place)}
+              >
+                <span className="place-card-icon" aria-hidden="true">
+                  {card?.icon ?? '•'}
+                </span>
+                <span className="place-card-copy">
+                  <span className="place-card-en">{card?.en ?? place.id}</span>
+                  <span className="place-card-name">{place.name}</span>
+                  <span className="place-card-blurb">{card?.blurb ?? ''}</span>
+                </span>
+                <span className="place-card-status">{open ? '열림' : '곧 공개'}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {closedPlaceId ? (
+          <p className="place-soon" role="status">
+            이 장소의 미션은 곧 공개돼요
+          </p>
+        ) : null}
       </div>
-      {closedPlaceId ? (
-        <p className="home-soon" role="status">
-          이 장소의 미션은 곧 공개돼요
-        </p>
-      ) : null}
-      <button
-        type="button"
-        className="home-back"
-        onClick={() => {
-          setClosedPlaceId(null)
-          setCountryId(null)
-        }}
-      >
-        이전
-      </button>
-    </PageFrame>
+    </main>
   )
 }
