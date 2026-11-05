@@ -49,13 +49,13 @@
     { "word": "group", "meaning": "그룹" }
   ],
   "scene": {
-    "backgroundImage": "placeholder",
+    "backgroundImage": "/airport-scene.jpg",
     "hotspots": [
       {
         "id": "wall-sign",
         "label": "벽 안내판",
         "x": 18,
-        "y": 30,
+        "y": 36,
         "type": "read",
         "text": "Welcome to New Zealand. If you are here to study, please go to Desk 4. Have your passport ready before you speak to an officer.",
         "question": "유학생은 몇 번 데스크로 가야 하나요?",
@@ -76,8 +76,8 @@
       {
         "id": "arrival-card",
         "label": "입국신고서",
-        "x": 48,
-        "y": 66,
+        "x": 42,
+        "y": 58,
         "type": "read",
         "text": "New Zealand Arrival Card\nFamily name: Kim\nPurpose of visit: Study\nHow long will you stay? 3 months\nWhere will you be staying? A homestay in Auckland\nHelp card: If you need this paper, say, \"I'd like to fill out this form.\"",
         "question": "신고서에 적힌 체류 기간은 얼마인가요?",
@@ -98,8 +98,8 @@
       {
         "id": "speaker",
         "label": "안내방송",
-        "x": 80,
-        "y": 24,
+        "x": 78,
+        "y": 28,
         "type": "listen",
         "text": "This is an airport announcement. Students, please keep your passport and arrival card ready. Your group number is 8. Wait until group 8 is called, then walk to the immigration desk.",
         "question": "안내방송에서 말한 그룹 번호는 무엇인가요?",
@@ -120,8 +120,8 @@
       {
         "id": "drawer",
         "label": "서랍",
-        "x": 70,
-        "y": 78,
+        "x": 72,
+        "y": 68,
         "type": "lock",
         "prompt": "코드는 데스크 번호, 체류 개월 수, 그룹 번호를 차례로 이은 세 자리입니다.",
         "answer": "438",

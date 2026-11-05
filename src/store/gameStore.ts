@@ -71,10 +71,13 @@ function canGoTo(state: GameState, step: GameStep): boolean {
   const { mission } = state
   if (!mission) return false
 
-  if (step === 'learn') return state.step === 'intro'
-  if (step === 'explore') return state.step === 'learn'
+  if (step === 'learn') return state.step === 'intro' || state.step === 'explore'
+  if (step === 'explore') return state.step === 'learn' || state.step === 'dialogue'
   if (step === 'dialogue') {
-    return state.step === 'explore' && state.unlockedLockIds.includes(mission.exit.requiredLockId)
+    return (
+      (state.step === 'explore' && state.unlockedLockIds.includes(mission.exit.requiredLockId)) ||
+      state.step === 'exit'
+    )
   }
   if (step === 'exit') return state.step === 'dialogue' && allSlotsFilled(mission, state.slots)
   if (step === 'result') return state.step === 'exit'

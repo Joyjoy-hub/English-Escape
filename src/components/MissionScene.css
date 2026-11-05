@@ -1,0 +1,147 @@
+.mission-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  background: #0c0805;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.mission-scene:active {
+  cursor: grabbing;
+}
+
+.mission-scene-world {
+  position: absolute;
+  inset: -18%;
+  width: 136%;
+  height: 136%;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.mission-scene-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+  filter: saturate(0.92) brightness(0.88) contrast(1.08);
+  pointer-events: none;
+}
+
+.mission-scene-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 30%, rgba(8, 5, 3, 0.35) 100%),
+    linear-gradient(180deg, rgba(8, 5, 3, 0.28) 0%, transparent 18%, transparent 72%, rgba(8, 5, 3, 0.5) 100%);
+  pointer-events: none;
+}
+
+.mission-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 0%, rgba(8, 5, 3, 0.42) 100%);
+  transition: background 0.08s linear;
+}
+
+.mission-spot {
+  position: absolute;
+  z-index: 3;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.mission-spot-pulse {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(241, 212, 138, 0.16) 0%, rgba(241, 212, 138, 0.05) 42%, transparent 70%);
+  opacity: 0.35;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.mission-spot:hover .mission-spot-pulse,
+.mission-spot:focus-visible .mission-spot-pulse {
+  opacity: 0.85;
+  box-shadow: 0 0 0 1px rgba(241, 212, 138, 0.35);
+  transform: scale(1.08);
+}
+
+.mission-spot.is-hint .mission-spot-pulse {
+  opacity: 1;
+  animation: mission-spot-hint 1s ease-in-out infinite;
+  box-shadow: 0 0 18px rgba(241, 212, 138, 0.55);
+}
+
+.mission-spot.is-done .mission-spot-pulse {
+  opacity: 0.9;
+  background: radial-gradient(circle, rgba(47, 125, 74, 0.55) 0%, rgba(47, 125, 74, 0.08) 55%, transparent 72%);
+  box-shadow: 0 0 0 2px rgba(47, 125, 74, 0.55);
+}
+
+@keyframes mission-spot-hint {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+.mission-drag-hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  z-index: 4;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid rgba(241, 212, 138, 0.35);
+  border-radius: 999px;
+  background: rgba(18, 11, 7, 0.62);
+  color: rgba(246, 234, 208, 0.88);
+  font-size: 13px;
+  font-weight: 700;
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: mission-drag-hint-fade 5s ease forwards;
+}
+
+@keyframes mission-drag-hint-fade {
+  0%,
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mission-spot.is-hint .mission-spot-pulse,
+  .mission-drag-hint {
+    animation: none;
+  }
+
+  .mission-drag-hint {
+    opacity: 0.85;
+  }
+}

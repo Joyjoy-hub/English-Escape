@@ -1,41 +1,50 @@
 import type { CollectedClue } from '../store/gameStore'
-import type { Hotspot } from '../types/mission'
+import type { ClueId, Hotspot } from '../types/mission'
 import './ClueInventory.css'
 
 type ClueInventoryProps = {
   clues: CollectedClue[]
   hotspots: Hotspot[]
+  requiredClueIds: ClueId[]
 }
 
-export function ClueInventory({ clues, hotspots }: ClueInventoryProps) {
-  const labeled = hotspots.flatMap((hotspot) => {
-    if (hotspot.type === 'lock') return []
-    const clue = clues.find((item) => item.id === hotspot.clueId)
-    return clue ? [{ id: clue.id, label: hotspot.label, value: clue.value }] : []
+export function ClueInventory({ clues, hotspots, requiredClueIds }: ClueInventoryProps) {
+  const slots = requiredClueIds.map((clueId, index) => {
+    const clue = clues.find((item) => item.id === clueId)
+    const hotspot = hotspots.find(
+      (item) => item.type !== 'lock' && 'clueId' in item && item.clueId === clueId,
+    )
+    return {
+      id: clueId,
+      index: index + 1,
+      label: hotspot && hotspot.type !== 'lock' ? hotspot.label : `단서 ${index + 1}`,
+      value: clue?.value ?? null,
+    }
   })
-  const knownIds = new Set(labeled.map((item) => item.id))
-  const items = [
-    ...labeled,
-    ...clues
-      .filter((clue) => !knownIds.has(clue.id))
-      .map((clue) => ({ id: clue.id, label: clue.id, value: clue.value })),
-  ]
 
   return (
     <section className="clue-inventory" aria-label="모은 단서">
-      <h2>단서</h2>
-      {items.length === 0 ? (
-        <p>아직 모은 단서가 없어요.</p>
-      ) : (
-        <ul>
-          {items.map((item) => (
-            <li key={item.id}>
-              <span>{item.label}</span>
-              <strong>{item.value}</strong>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="clue-inventory-head">
+        <h2>단서 가방</h2>
+        <p>{slots.filter((slot) => slot.value).length}/{slots.length}</p>
+      </div>
+      <ul>
+        {slots.map((slot) => (
+          <li key={slot.id} className={slot.value ? 'is-found' : 'is-hidden'}>
+            {slot.value ? (
+              <>
+                <span>{slot.label}</span>
+                <strong>{slot.value}</strong>
+              </>
+            ) : (
+              <>
+                <span>미발견</span>
+                <strong>?</strong>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }
