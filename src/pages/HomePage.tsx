@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 
 import { PageFrame } from '../components/PageFrame'
 import { stepPath } from '../components/StepGuard'
+import { countryMapPins } from '../data/countryMap'
 import { destinations } from '../data/destinations'
 import { missions } from '../data/missions'
 import { useGameStore } from '../store/gameStore'
@@ -43,8 +44,11 @@ export function HomePage() {
   const goToStep = useGameStore((state) => state.goToStep)
   const [hydrated, setHydrated] = useState(() => useGameStore.persist.hasHydrated())
   const [countryId, setCountryId] = useState<string | null>(null)
+  const [focusedCountryId, setFocusedCountryId] = useState<string | null>('new-zealand')
   const [closedPlaceId, setClosedPlaceId] = useState<string | null>(null)
   const country = destinations.countries.find((item) => item.id === countryId) ?? null
+  const focusedPin = countryMapPins.find((pin) => pin.id === focusedCountryId) ?? null
+  const focusedCountry = destinations.countries.find((item) => item.id === focusedCountryId) ?? null
   const canContinue = Boolean(
     hydrated &&
       country &&
@@ -82,18 +86,54 @@ export function HomePage() {
 
   if (!country) {
     return (
-      <PageFrame title="국가 선택" description="여행할 국가를 고르세요.">
-        <div className="home-choices">
-          {destinations.countries.map((item) => (
-            <button key={item.id} type="button" className="home-choice" onClick={() => chooseCountry(item.id)}>
-              <span className="home-choice-copy">
-                <span className="home-choice-en">{englishLabel[item.id] ?? item.id}</span>
-                <span>{item.name}</span>
-              </span>
-            </button>
-          ))}
+      <main className="country-map-page">
+        <header className="country-map-header">
+          <p className="page-kicker">English Escape</p>
+          <h1>국가 선택</h1>
+          <p>지도에서 여행할 국가를 고르세요.</p>
+        </header>
+
+        <div className="country-map-stage">
+          <div className="country-map-scroll">
+            <div className="country-map-board" role="group" aria-label="세계 지도">
+              <img className="country-map-image" src="/world-map.jpg" alt="" />
+              {countryMapPins.map((pin) => {
+                const label = destinations.countries.find((item) => item.id === pin.id)?.name ?? pin.en
+                const selected = pin.id === focusedCountryId
+                return (
+                  <button
+                    key={pin.id}
+                    type="button"
+                    className={selected ? 'country-map-pin is-selected' : 'country-map-pin'}
+                    style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
+                    aria-pressed={selected}
+                    aria-label={label}
+                    onClick={() => setFocusedCountryId(pin.id)}
+                  >
+                    <span className="country-map-pin-dot" aria-hidden="true" />
+                    <span className="country-map-pin-label">
+                      <span className="country-map-pin-en">{pin.en}</span>
+                      <span>{label}</span>
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
         </div>
-      </PageFrame>
+
+        {focusedPin && focusedCountry ? (
+          <section className="country-map-card" aria-live="polite">
+            <p className="country-map-card-en">{focusedPin.en}</p>
+            <h2>{focusedCountry.name}</h2>
+            <p className="country-map-card-tag">{focusedPin.tagline}</p>
+            <p className="country-map-card-blurb">{focusedPin.blurb}</p>
+            <button type="button" className="country-map-confirm" onClick={() => chooseCountry(focusedPin.id)}>
+              이 나라로 가기
+            </button>
+          </section>
+        ) : null}
+      </main>
     )
   }
 
