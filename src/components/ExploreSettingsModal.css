@@ -1,0 +1,164 @@
+.explore-settings-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(8, 5, 3, 0.62);
+  backdrop-filter: blur(4px);
+}
+
+.explore-settings-panel {
+  box-sizing: border-box;
+  width: min(100%, 380px);
+  max-height: min(88svh, 520px);
+  overflow: auto;
+  border: 1px solid rgba(241, 212, 138, 0.45);
+  border-radius: 20px;
+  background: linear-gradient(180deg, #fff8ea 0%, #f4e6c8 100%);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.38);
+}
+
+.explore-settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(42, 23, 8, 0.12);
+}
+
+.explore-settings-header h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: Cinzel, 'Times New Roman', serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.explore-settings-close {
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: rgba(42, 23, 8, 0.08);
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.explore-settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 18px 8px;
+}
+
+.explore-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 12px;
+  border: 1px solid rgba(192, 137, 56, 0.22);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+}
+
+.explore-settings-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.explore-settings-copy strong {
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.explore-settings-copy small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.explore-settings-switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 46px;
+  height: 28px;
+}
+
+.explore-settings-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.explore-settings-switch-ui {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(42, 23, 8, 0.2);
+  transition: background 0.18s ease;
+}
+
+.explore-settings-switch-ui::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.18s ease;
+}
+
+.explore-settings-switch input:checked + .explore-settings-switch-ui {
+  background: linear-gradient(180deg, #c08938, #8f5f22);
+}
+
+.explore-settings-switch input:checked + .explore-settings-switch-ui::after {
+  transform: translateX(18px);
+}
+
+.explore-settings-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 18px 16px;
+}
+
+.explore-settings-kit {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(192, 137, 56, 0.45);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff8ea 0%, #f4e6c8 100%);
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.explore-settings-reset {
+  width: 100%;
+  min-height: 44px;
+  border: 1px dashed rgba(42, 23, 8, 0.28);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.explore-settings-reset:hover {
+  border-color: rgba(192, 137, 56, 0.45);
+  color: var(--ink);
+}

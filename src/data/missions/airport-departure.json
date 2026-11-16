@@ -1,0 +1,136 @@
+{
+  "id": "airport-departure",
+  "title": "공항 출국장 탈출",
+  "place": "공항 출국장",
+  "intro": "비행기 시간이 다가옵니다. 안내 방송, 카운터 직원, 출국 안내판을 살펴 게이트 번호를 찾아보세요.",
+  "clearMessage": "게이트를 찾았습니다! 출국장 미션을 클리어했어요.",
+  "maxScore": 100,
+  "hintPenalty": 10,
+  "scene": {
+    "backgroundImage": "/airport-scene.jpg",
+    "hotspots": [
+      {
+        "id": "boarding-call",
+        "label": "출국 안내 방송",
+        "x": 88,
+        "y": 18,
+        "puzzleId": "boarding-call"
+      },
+      {
+        "id": "check-in-talk",
+        "label": "체크인 카운터",
+        "x": 28,
+        "y": 72,
+        "puzzleId": "check-in-talk"
+      },
+      {
+        "id": "gate-board",
+        "label": "출국 안내판",
+        "x": 58,
+        "y": 40,
+        "puzzleId": "gate-board"
+      }
+    ]
+  },
+  "expressions": [
+    {
+      "en": "Where is the departure gate?",
+      "ko": "출국 게이트가 어디에 있나요?",
+      "usage": "게이트 위치를 물을 때 씁니다."
+    },
+    {
+      "en": "Could you say that again?",
+      "ko": "다시 한 번 말씀해 주시겠어요?",
+      "usage": "못 알아들었을 때 공손히 되물을 때 씁니다."
+    },
+    {
+      "en": "I'd like to check in, please.",
+      "ko": "체크인하고 싶습니다.",
+      "usage": "카운터에서 체크인을 요청할 때 씁니다."
+    },
+    {
+      "en": "What time does boarding start?",
+      "ko": "탑승은 몇 시에 시작하나요?",
+      "usage": "탑승 시작 시간을 확인할 때 씁니다."
+    },
+    {
+      "en": "Have a nice flight!",
+      "ko": "좋은 비행 되세요!",
+      "usage": "출국장에서 흔히 듣는 인사입니다."
+    }
+  ],
+  "puzzles": [
+    {
+      "id": "boarding-call",
+      "type": "listen",
+      "title": "안내 방송 듣기",
+      "npcName": "Airport Announcer",
+      "line": "Attention please. Flight KE712 to Auckland will begin boarding at gate 15 in twenty minutes.",
+      "prompt": "방송에서 말한 게이트 번호를 입력하세요.",
+      "answer": "15",
+      "accept": ["15", "gate 15", "Gate 15", "GATE 15"],
+      "slowRate": 0.75,
+      "askAgainChoice": "Could you say that again?",
+      "wrongExplain": "방송에 gate 번호가 나옵니다. 다시 듣고 숫자만 적어 보세요.",
+      "hintKo": "힌트: 게이트 번호는 십오(15)번입니다.",
+      "clueLabel": "게이트 번호",
+      "clueValue": "15"
+    },
+    {
+      "id": "check-in-talk",
+      "type": "talk",
+      "title": "체크인 카운터 대화",
+      "npcName": "Counter Staff",
+      "situation": "체크인 카운터에서 직원이 먼저 말을 겁니다.",
+      "line": "Good afternoon. How can I help you today?",
+      "askAgainChoiceId": "ask-again",
+      "slowRate": 0.72,
+      "hintKo": "힌트: 체크인을 요청하는 문장을 고르세요.",
+      "clueLabel": "체크인 패스",
+      "clueValue": "Boarding pass ready",
+      "choices": [
+        {
+          "id": "good-checkin",
+          "text": "I'd like to check in, please.",
+          "quality": "good",
+          "reply": "Of course. Your seat is confirmed. Please keep this boarding note: B.",
+          "explain": "체크인을 요청하는 자연스러운 표현이에요."
+        },
+        {
+          "id": "ask-again",
+          "text": "Could you say that again?",
+          "quality": "awkward",
+          "reply": "Sure. How can I help you today?",
+          "explain": "되묻기는 괜찮지만, 이번엔 체크인을 요청해야 해요."
+        },
+        {
+          "id": "wrong-food",
+          "text": "I'd like a coffee, please.",
+          "quality": "wrong",
+          "reply": "This is the check-in counter, not a cafe.",
+          "explain": "카페 주문이어서 상황에 맞지 않아요."
+        }
+      ]
+    },
+    {
+      "id": "gate-board",
+      "type": "read",
+      "title": "출국 안내판 읽기",
+      "prompt": "안내판과 영수증에서 최종 게이트 확인 코드를 찾으세요.",
+      "documentTitle": "Departure Board & Tax-Free Receipt",
+      "documentLines": [
+        "KE712 Auckland  | Status: BOARDING SOON",
+        "Gate: 15  | Boarding starts: 14:20",
+        "Tax-free receipt no. A-15",
+        "Note: Final check code = Gate number + receipt letter B",
+        "Example format: 15B"
+      ],
+      "lockPrompt": "자물쇠 코드를 입력하세요. (예: 15B)",
+      "answer": "15B",
+      "wrongExplain": "게이트 번호와 영수증의 글자 B를 이어 붙여 보세요.",
+      "hintKo": "힌트: 게이트 15와 글자 B를 합치면 15B입니다.",
+      "clueLabel": "출국 코드",
+      "clueValue": "15B"
+    }
+  ]
+}

@@ -3,6 +3,235 @@
   min-height: 100svh;
 }
 
+.explore-screen--point-click .explore-hud {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: max(14px, env(safe-area-inset-top)) 14px 0;
+  pointer-events: none;
+}
+
+.explore-screen--point-click .explore-hud > * {
+  pointer-events: auto;
+}
+
+.explore-top--hud {
+  position: static;
+  padding: 0;
+}
+
+.explore-briefing--hud {
+  position: static;
+  width: min(calc(100% - 0px), 360px);
+  margin: 0;
+}
+
+.explore-screen--point-click .explore-briefing--hud {
+  max-width: min(calc(100vw - 28px), 300px);
+}
+
+.explore-screen--point-click .explore-top--hud {
+  padding-right: 0;
+}
+
+.explore-screen--gallery {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 100svh;
+  padding:
+    max(8px, env(safe-area-inset-top))
+    max(8px, env(safe-area-inset-right))
+    max(8px, env(safe-area-inset-bottom))
+    max(8px, env(safe-area-inset-left));
+  background: #0c0805;
+}
+
+.explore-stage-16x9 {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 16 / 9;
+  width: min(100vw, calc(100svh * 16 / 9));
+  height: min(100svh, calc(100vw * 9 / 16));
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(241, 212, 138, 0.28);
+  border-radius: 14px;
+  background: #0c0805;
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(232, 198, 122, 0.1);
+}
+
+.explore-stage-16x9 .mission-panels-viewport {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+}
+
+/* 레퍼런스 JPG 상·하단에 박힌 UI(수첩·화살표) 영역 잘라냄 */
+.explore-stage-16x9 .mission-panel-world {
+  top: -11%;
+  right: -8%;
+  bottom: -14%;
+  left: -8%;
+  width: auto;
+  height: auto;
+}
+
+.explore-stage-16x9 .mission-panel-image {
+  height: 106%;
+  margin-top: -2%;
+  object-fit: cover;
+  object-position: center 42%;
+}
+
+.explore-stage-16x9 .mission-panel-stage::before,
+.explore-stage-16x9 .mission-panel-stage::after {
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+  content: '';
+}
+
+.explore-stage-16x9 .mission-panel-stage::before {
+  top: 0;
+  height: 5%;
+  background: linear-gradient(180deg, rgba(12, 8, 5, 0.78) 0%, rgba(12, 8, 5, 0) 100%);
+}
+
+.explore-stage-16x9 .mission-panel-stage::after {
+  bottom: 0;
+  height: 7%;
+  background: linear-gradient(0deg, rgba(12, 8, 5, 0.8) 0%, rgba(12, 8, 5, 0) 100%);
+}
+
+.explore-gallery-hud {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 8;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: max(14px, env(safe-area-inset-top)) 14px 0;
+  pointer-events: none;
+}
+
+.explore-stage-16x9 .explore-gallery-hud {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 12px 14px 0;
+}
+
+.explore-settings-button--gallery {
+  margin-left: auto;
+}
+
+.explore-gallery-hud > * {
+  pointer-events: auto;
+}
+
+.explore-back--ghost {
+  background: rgba(74, 48, 28, 0.72);
+  border-color: rgba(241, 212, 138, 0.45);
+}
+
+.explore-gallery-hud-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.explore-kit-button--gallery {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 148px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+}
+
+.explore-kit-button-icon {
+  display: grid;
+  place-items: center;
+  color: var(--wood);
+}
+
+.explore-settings-button {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(241, 212, 138, 0.55);
+  border-radius: 999px;
+  background: rgba(74, 48, 28, 0.82);
+  color: var(--cream);
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(6px);
+}
+
+.explore-settings-button svg {
+  display: block;
+}
+
+.explore-stage-16x9 .clue-dock {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  left: 12px;
+  width: auto;
+}
+
+.explore-stage-16x9 .mission-panel-nav {
+  position: absolute;
+  top: 42%;
+  bottom: auto;
+  z-index: 6;
+  opacity: 0.88;
+}
+
+.explore-stage-16x9 .mission-panel-nav.is-prev,
+.explore-stage-16x9 .mission-panel-nav.is-next {
+  transform: translateY(-50%);
+}
+
+.explore-stage-16x9 .mission-panel-nav:hover {
+  transform: translateY(-50%) scale(1.06);
+}
+
+.explore-stage-16x9 .mission-panel-nav:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.explore-stage-16x9 .mission-panel-nav.is-prev {
+  left: 10px;
+}
+
+.explore-stage-16x9 .mission-panel-nav.is-next {
+  right: 10px;
+}
+
 .explore-vignette {
   position: fixed;
   inset: 0;

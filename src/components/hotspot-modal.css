@@ -205,6 +205,23 @@
   text-align: center;
 }
 
+.object-stub-mission-title {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-family: Cinzel, 'Times New Roman', serif;
+  font-size: 18px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.object-stub-note {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 380px) {
   .hotspot-modal-backdrop {
     padding: 8px;

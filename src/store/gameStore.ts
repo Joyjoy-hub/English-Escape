@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
+import { resolveMission } from '../data/missions/resolveMission'
+import { day1Mission } from '../data/missions/day1'
 import type { ClueId, DialogueSlotId, Hotspot, Mission } from '../types/mission'
 
 export type GameStep = 'intro' | 'learn' | 'explore' | 'dialogue' | 'exit' | 'result'
@@ -74,10 +76,7 @@ function canGoTo(state: GameState, step: GameStep): boolean {
   if (step === 'learn') return state.step === 'intro' || state.step === 'explore'
   if (step === 'explore') return state.step === 'learn' || state.step === 'dialogue'
   if (step === 'dialogue') {
-    return (
-      (state.step === 'explore' && state.unlockedLockIds.includes(mission.exit.requiredLockId)) ||
-      state.step === 'exit'
-    )
+    return state.step === 'explore' || state.step === 'exit'
   }
   if (step === 'exit') return state.step === 'dialogue' && allSlotsFilled(mission, state.slots)
   if (step === 'result') return state.step === 'exit'
@@ -90,7 +89,7 @@ export const useGameStore = create<GameStore>()(
       mission: null,
       ...freshProgress(),
 
-      startMission: (mission) => set({ mission, ...freshProgress() }),
+      startMission: (mission) => set({ mission: resolveMission(mission), ...freshProgress() }),
 
       goToStep: (step) =>
         set((state) => {
@@ -150,7 +149,14 @@ export const useGameStore = create<GameStore>()(
     {
       name: 'english-escape-game',
       storage: createJSONStorage(() => localStorage),
-      version: 1,
+      version: 2,
+      migrate: (persistedState, version) => {
+        const state = persistedState as GameState
+        if (version < 2 && state.mission?.id === day1Mission.id) {
+          state.mission = day1Mission
+        }
+        return state
+      },
     },
   ),
 )

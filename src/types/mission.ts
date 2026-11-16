@@ -70,8 +70,30 @@ export type LockHotspot = HotspotBase & {
 
 export type Hotspot = ReadHotspot | ListenHotspot | LockHotspot;
 
+/** 포인트 앤 클릭 탐색용 사물 (STEP 1~2: 클릭 → 임시 미션 팝업) */
+export type SceneInteractable = HotspotBase & {
+  /** 퍼센트 너비·높이 (배경 대비 클릭 영역) */
+  w: number;
+  h: number;
+  stubTitle: string;
+  stubMessage: string;
+  clueSlotId: ClueId;
+  /** 가로 넘김 패널 id (`scene.panels`) */
+  panelId?: string;
+};
+
+export type ScenePanel = {
+  id: string;
+  label: string;
+  image: string;
+};
+
 export type Scene = {
   backgroundImage: string;
+  /** 옆으로 넘기는 탐색 구역 */
+  panels?: ScenePanel[];
+  /** 있으면 탐색 화면은 사물 클릭 + 스텁 모달 모드 */
+  interactables?: SceneInteractable[];
   hotspots: Hotspot[];
 };
 

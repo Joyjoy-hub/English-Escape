@@ -1,125 +1,173 @@
+import { useState } from 'react'
 import { createPortal } from 'react-dom'
 
 import { useGameStore } from '../store/gameStore'
+import { useSettingsStore } from '../store/settingsStore'
 import { ExpressionCard } from './ExpressionCard'
+import './SurvivalKitModal.css'
 
 type SurvivalKitModalProps = {
   isOpen: boolean
   onClose: () => void
 }
 
+type SurvivalKitTab = 'expressions' | 'vocabulary' | 'memo'
+
+const TAB_COPY: Record<
+  SurvivalKitTab,
+  { label: string; icon: string; title: string; intro: string }
+> = {
+  expressions: {
+    label: '핵심 표현',
+    icon: '💬',
+    title: '핵심 표현',
+    intro: '입국 심사에서 자주 사용하는 유용한 표현이에요.',
+  },
+  vocabulary: {
+    label: '필수 어휘',
+    icon: '📖',
+    title: '필수 어휘',
+    intro: '이번 미션에서 꼭 알아두면 좋은 단어예요.',
+  },
+  memo: {
+    label: '메모',
+    icon: '📋',
+    title: '메모',
+    intro: '미션 목표와 상황을 짧게 정리해 두었어요.',
+  },
+}
+
+function speakEnglish(text: string) {
+  if (!('speechSynthesis' in window)) return
+  window.speechSynthesis.cancel()
+  const utterance = new SpeechSynthesisUtterance(text)
+  utterance.lang = 'en-US'
+  window.speechSynthesis.speak(utterance)
+}
+
 export function SurvivalKitModal({ isOpen, onClose }: SurvivalKitModalProps) {
-  const expressions = useGameStore((state) => state.mission?.expressions ?? [])
+  const mission = useGameStore((state) => state.mission)
+  const soundEnabled = useSettingsStore((state) => state.soundEnabled)
+  const [tab, setTab] = useState<SurvivalKitTab>('expressions')
 
   if (!isOpen) return null
 
+  const expressions = mission?.expressions ?? []
+  const vocabulary = mission?.vocabulary ?? []
+  const countryName = mission?.country.name ?? 'New Zealand'
+  const tabMeta = TAB_COPY[tab]
+
+  function playWord(word: string) {
+    if (!soundEnabled) return
+    speakEnglish(word)
+  }
+
   return createPortal(
-    <>
-      <style>{survivalKitCss}</style>
-      <div className="survival-kit-backdrop" onClick={onClose}>
-        <div
-          className="survival-kit-panel"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="survival-kit-title"
-          onClick={(event) => event.stopPropagation()}
-        >
-          <header className="survival-kit-header">
-            <h2 id="survival-kit-title">Survival Kit 수첩</h2>
-            <button type="button" className="survival-kit-close" onClick={onClose}>
-              닫기
-            </button>
-          </header>
-          <div className="survival-kit-list">
-            {expressions.length === 0 ? (
-              <p className="survival-kit-empty">이번 미션의 표현이 없습니다.</p>
-            ) : (
-              expressions.map((expression) => (
-                <ExpressionCard key={expression.en} expression={expression} />
-              ))
-            )}
+    <div className="survival-kit-backdrop" onClick={onClose}>
+      <div
+        className="survival-kit-journal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="survival-kit-title"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <aside className="survival-kit-spine">
+          <div className="survival-kit-tag">
+            <span className="survival-kit-tag-icon" aria-hidden="true">
+              ✈
+            </span>
+            <p id="survival-kit-title" className="survival-kit-tag-title">
+              Survival Kit
+            </p>
+            <p className="survival-kit-tag-sub">여행 영어 가이드</p>
           </div>
-        </div>
+
+          <nav className="survival-kit-nav" aria-label="수첩 메뉴">
+            {(Object.keys(TAB_COPY) as SurvivalKitTab[]).map((key) => (
+              <button
+                key={key}
+                type="button"
+                className={tab === key ? 'survival-kit-tab is-active' : 'survival-kit-tab'}
+                onClick={() => setTab(key)}
+              >
+                <span className="survival-kit-tab-icon" aria-hidden="true">
+                  {TAB_COPY[key].icon}
+                </span>
+                <span>{TAB_COPY[key].label}</span>
+              </button>
+            ))}
+          </nav>
+
+          <div className="survival-kit-polaroid" aria-hidden="true">
+            <span className="survival-kit-polaroid-pin" />
+            <div className="survival-kit-polaroid-photo">{countryName.toUpperCase()}</div>
+            <p className="survival-kit-polaroid-label">{countryName}</p>
+          </div>
+        </aside>
+
+        <section className="survival-kit-page">
+          <button type="button" className="survival-kit-close-x" aria-label="닫기" onClick={onClose}>
+            ×
+          </button>
+
+          <div className="survival-kit-stamp" aria-hidden="true">
+            IMMIGRATION
+            <span>✈</span>
+          </div>
+
+          <header className="survival-kit-page-head">
+            <h2 className="survival-kit-page-title">
+              <span aria-hidden="true">{tabMeta.icon}</span>
+              {tabMeta.title}
+            </h2>
+            <p className="survival-kit-page-intro">{tabMeta.intro}</p>
+          </header>
+
+          <div className="survival-kit-scroll">
+            {tab === 'expressions' ? (
+              expressions.length === 0 ? (
+                <p className="survival-kit-empty">이번 미션의 표현이 없습니다.</p>
+              ) : (
+                expressions.map((expression, index) => (
+                  <ExpressionCard key={expression.en} expression={expression} variant="journal" highlighted={index === 0} />
+                ))
+              )
+            ) : null}
+
+            {tab === 'vocabulary' ? (
+              vocabulary.length === 0 ? (
+                <p className="survival-kit-empty">등록된 어휘가 없습니다.</p>
+              ) : (
+                <div className="survival-kit-vocab-list">
+                  {vocabulary.map((item) => (
+                    <div key={item.word} className="survival-kit-vocab-row">
+                      <div>
+                        <p className="survival-kit-vocab-word">{item.word}</p>
+                        <p className="survival-kit-vocab-meaning">{item.meaning}</p>
+                      </div>
+                      <button
+                        type="button"
+                        className="expression-journal-speak"
+                        aria-label={`${item.word} 발음 듣기`}
+                        onClick={() => playWord(item.word)}
+                      >
+                        🔊
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )
+            ) : null}
+
+            {tab === 'memo' ? (
+              <div className="survival-kit-memo">
+                <div className="survival-kit-memo-box">{mission?.intro ?? '미션 메모가 없습니다.'}</div>
+              </div>
+            ) : null}
+          </div>
+        </section>
       </div>
-    </>,
+    </div>,
     document.body,
   )
 }
-
-const survivalKitCss = `
-.survival-kit-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  box-sizing: border-box;
-  padding: 16px;
-  background: rgba(18, 11, 7, 0.62);
-}
-
-.survival-kit-panel {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  width: min(100%, 480px);
-  max-height: min(85svh, 720px);
-  padding: 16px 16px 20px;
-  border-radius: 20px 20px 16px 16px;
-  border: 1px solid var(--brass-edge);
-  background: var(--cream);
-}
-
-.survival-kit-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.survival-kit-header h2 {
-  margin: 0;
-  color: var(--ink);
-  font-family: Cinzel, 'Times New Roman', serif;
-  font-size: 22px;
-  line-height: 1.3;
-  overflow-wrap: anywhere;
-}
-
-.survival-kit-close {
-  flex: 0 0 auto;
-  min-height: 48px;
-  padding: 12px 16px;
-  border: 0;
-  border-radius: 12px;
-  background: #e8dcc4;
-  color: var(--ink);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.survival-kit-list {
-  overflow-y: auto;
-  min-height: 0;
-  margin-top: 4px;
-  padding-bottom: 4px;
-}
-
-.survival-kit-empty {
-  margin: 16px 0 0;
-  color: var(--muted);
-  overflow-wrap: anywhere;
-}
-
-@media (max-width: 380px) {
-  .survival-kit-backdrop {
-    padding: 8px;
-  }
-
-  .survival-kit-header h2 {
-    font-size: 20px;
-  }
-}
-`

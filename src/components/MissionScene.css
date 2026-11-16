@@ -63,6 +63,50 @@
   cursor: pointer;
 }
 
+.mission-spot.has-area {
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+}
+
+.mission-spot.has-area .mission-spot-pulse {
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(241, 212, 138, 0.08);
+}
+
+.mission-spot.has-area:hover .mission-spot-pulse,
+.mission-spot.has-area:focus-visible .mission-spot-pulse {
+  box-shadow:
+    inset 0 0 0 2px rgba(241, 212, 138, 0.55),
+    0 0 22px rgba(241, 212, 138, 0.28);
+}
+
+.mission-spot-label {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  z-index: 1;
+  max-width: 120px;
+  padding: 4px 8px;
+  border: 1px solid rgba(241, 212, 138, 0.45);
+  border-radius: 8px;
+  background: rgba(18, 11, 7, 0.82);
+  color: var(--brass-light);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  overflow-wrap: anywhere;
+}
+
+.mission-spot.has-area:hover .mission-spot-label,
+.mission-spot.has-area:focus-visible .mission-spot-label {
+  opacity: 1;
+}
+
 .mission-spot-pulse {
   display: block;
   width: 100%;
@@ -109,7 +153,7 @@
 .mission-drag-hint {
   position: absolute;
   left: 50%;
-  bottom: calc(96px + env(safe-area-inset-bottom));
+  bottom: calc(148px + env(safe-area-inset-bottom));
   z-index: 4;
   margin: 0;
   padding: 8px 12px;

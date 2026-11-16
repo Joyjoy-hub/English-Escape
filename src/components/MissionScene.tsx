@@ -1,15 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
-import type { PointerEvent as ReactPointerEvent } from 'react'
+import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from 'react'
 
-import type { Hotspot } from '../types/mission'
 import './MissionScene.css'
+
+export type SceneSpot = {
+  id: string
+  label: string
+  x: number
+  y: number
+  w?: number
+  h?: number
+}
 
 type MissionSceneProps = {
   imageUrl: string
-  hotspots: Hotspot[]
+  hotspots: SceneSpot[]
   completedIds: string[]
   hintVisible: boolean
-  onHotspotClick: (hotspot: Hotspot) => void
+  onHotspotClick: (hotspot: SceneSpot) => void
 }
 
 type Point = { x: number; y: number }
@@ -22,6 +30,7 @@ export function MissionScene({
   onHotspotClick,
 }: MissionSceneProps) {
   const viewportRef = useRef<HTMLDivElement>(null)
+  const spotRefs = useRef<Array<HTMLButtonElement | null>>([])
   const dragRef = useRef<{ active: boolean; startX: number; startY: number; originX: number; originY: number }>({
     active: false,
     startX: 0,
@@ -31,6 +40,7 @@ export function MissionScene({
   })
   const [offset, setOffset] = useState<Point>({ x: 0, y: 0 })
   const [spotlight, setSpotlight] = useState<Point | null>(null)
+  const [focusIndex, setFocusIndex] = useState(0)
   const completed = new Set(completedIds)
 
   useEffect(() => {
@@ -55,6 +65,13 @@ export function MissionScene({
     }
   }, [])
 
+  useEffect(() => {
+    setFocusIndex((value) => {
+      if (hotspots.length === 0) return 0
+      return Math.min(value, hotspots.length - 1)
+    })
+  }, [hotspots.length])
+
   function startDrag(event: ReactPointerEvent<HTMLDivElement>) {
     if ((event.target as HTMLElement).closest('.mission-spot')) return
     dragRef.current = {
@@ -76,6 +93,32 @@ export function MissionScene({
     })
   }
 
+  function focusSpot(index: number) {
+    const next = ((index % hotspots.length) + hotspots.length) % hotspots.length
+    setFocusIndex(next)
+    spotRefs.current[next]?.focus()
+  }
+
+  function onSceneKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
+    if (hotspots.length === 0) return
+    const target = event.target as HTMLElement
+    if (!target.closest('.mission-spot')) return
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      event.preventDefault()
+      focusSpot(focusIndex + 1)
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      event.preventDefault()
+      focusSpot(focusIndex - 1)
+    } else if (event.key === 'Home') {
+      event.preventDefault()
+      focusSpot(0)
+    } else if (event.key === 'End') {
+      event.preventDefault()
+      focusSpot(hotspots.length - 1)
+    }
+  }
+
   return (
     <div
       ref={viewportRef}
@@ -83,6 +126,7 @@ export function MissionScene({
       onPointerDown={startDrag}
       onPointerMove={trackSpotlight}
       onPointerLeave={() => setSpotlight(null)}
+      onKeyDown={onSceneKeyDown}
     >
       <div
         className="mission-scene-world"
@@ -93,22 +137,39 @@ export function MissionScene({
 
         {hotspots.map((hotspot, index) => {
           const done = completed.has(hotspot.id)
+          const hasArea = Boolean(hotspot.w && hotspot.h)
           return (
             <button
               key={hotspot.id}
+              ref={(node) => {
+                spotRefs.current[index] = node
+              }}
               type="button"
               className={[
                 'mission-spot',
+                hasArea ? 'has-area' : '',
                 done ? 'is-done' : '',
                 hintVisible && !done ? 'is-hint' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
-              style={{ left: `${hotspot.x}%`, top: `${hotspot.y}%` }}
-              aria-label={done ? `${hotspot.label} 완료` : `살펴볼 곳 ${index + 1}`}
+              style={{
+                left: `${hotspot.x}%`,
+                top: `${hotspot.y}%`,
+                ...(hasArea
+                  ? {
+                      width: `${hotspot.w}%`,
+                      height: `${hotspot.h}%`,
+                    }
+                  : undefined),
+              }}
+              tabIndex={index === focusIndex ? 0 : -1}
+              aria-label={done ? `${hotspot.label} 완료` : `${hotspot.label} 살펴보기`}
+              onFocus={() => setFocusIndex(index)}
               onClick={() => onHotspotClick(hotspot)}
             >
               <span className="mission-spot-pulse" aria-hidden="true" />
+              {hasArea ? <span className="mission-spot-label" aria-hidden="true">{hotspot.label}</span> : null}
             </button>
           )
         })}
@@ -127,7 +188,7 @@ export function MissionScene({
       />
 
       <p className="mission-drag-hint" aria-hidden="true">
-        화면을 끌어서 주변을 살펴보세요
+        화면을 끌어서 주변을 살펴보세요 · Tab으로 사물 선택
       </p>
     </div>
   )

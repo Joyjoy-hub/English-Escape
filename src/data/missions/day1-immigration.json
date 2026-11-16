@@ -50,6 +50,102 @@
   ],
   "scene": {
     "backgroundImage": "/airport-scene.jpg",
+    "panels": [
+      {
+        "id": "lounge",
+        "label": "대기실",
+        "image": "/explore/panel-1-lounge.jpg"
+      },
+      {
+        "id": "immigration",
+        "label": "심사대",
+        "image": "/explore/panel-2-immigration.jpg"
+      },
+      {
+        "id": "counter",
+        "label": "안내 데스크",
+        "image": "/explore/panel-3-counter.jpg"
+      },
+      {
+        "id": "security",
+        "label": "보안 구역",
+        "image": "/explore/panel-4-security.jpg"
+      }
+    ],
+    "interactables": [
+      {
+        "id": "standing-notice",
+        "label": "안내문",
+        "panelId": "lounge",
+        "x": 32,
+        "y": 36,
+        "w": 12,
+        "h": 14,
+        "stubTitle": "Read the arrival notice",
+        "stubMessage": "출발 안내 전광판입니다. 입국 절차와 데스크 안내를 읽는 미션이 연결됩니다.",
+        "clueSlotId": "guide"
+      },
+      {
+        "id": "desk-papers",
+        "label": "여권·서류",
+        "panelId": "lounge",
+        "x": 70,
+        "y": 74,
+        "w": 11,
+        "h": 9,
+        "stubTitle": "Find your passport and forms",
+        "stubMessage": "좌석 위에 놓인 서류 꾸러미입니다. 여권은 다른 구역의 잠금 장치 안에 있을 수 있습니다.",
+        "clueSlotId": "passport"
+      },
+      {
+        "id": "desk-computer",
+        "label": "컴퓨터",
+        "panelId": "immigration",
+        "x": 40,
+        "y": 47,
+        "w": 12,
+        "h": 10,
+        "stubTitle": "Check the immigration system",
+        "stubMessage": "심사 데스크 모니터입니다. 입국 시스템 안내를 읽는 미션이 연결됩니다.",
+        "clueSlotId": "computer"
+      },
+      {
+        "id": "officer-booth",
+        "label": "심사관·인터폰",
+        "panelId": "immigration",
+        "x": 52,
+        "y": 36,
+        "w": 22,
+        "h": 14,
+        "stubTitle": "Talk with the officer",
+        "stubMessage": "유리 부스 안 심사관과 인터폰 구역입니다. NPC 대화 미션의 중심입니다.",
+        "clueSlotId": "officer"
+      },
+      {
+        "id": "wall-phone",
+        "label": "전화기",
+        "panelId": "immigration",
+        "x": 83,
+        "y": 53,
+        "w": 10,
+        "h": 12,
+        "stubTitle": "Use the desk phone",
+        "stubMessage": "오른쪽 보조 데스크의 전화기입니다. 안내 통화·방송 미션이 연결됩니다.",
+        "clueSlotId": "phone"
+      },
+      {
+        "id": "locked-drawer",
+        "label": "잠긴 서랍",
+        "panelId": "security",
+        "x": 76,
+        "y": 41,
+        "w": 13,
+        "h": 18,
+        "stubTitle": "Open the locked door",
+        "stubMessage": "보안 구역의 번호 키패드 문입니다. 단서를 모아 코드를 맞추는 미션이 연결됩니다.",
+        "clueSlotId": "drawer"
+      }
+    ],
     "hotspots": [
       {
         "id": "wall-sign",
@@ -222,7 +318,7 @@
     ]
   },
   "exit": {
-    "requiredClueIds": ["desk", "months", "group"],
+    "requiredClueIds": ["computer", "passport", "guide", "phone", "officer", "drawer"],
     "requiredLockId": "drawer",
     "requireDialogue": true,
     "message": "서랍에서 여권을 찾았습니다. 심사관의 질문을 마치고 입국 심사를 통과했습니다."
