@@ -20,14 +20,16 @@ type LoopedPanel = ScenePanel & { loopKey: string }
 type PanPoint = { x: number; y: number }
 
 const SLIDE_MS = 420
+/** 드래그 1px당 화면 이동 비율 (탐색 갤러리만 낮춤) */
+const PAN_DRAG_GAIN = 0.52
 
 function panLimits(viewport?: DOMRect | null, tight = false) {
   const w = viewport?.width ?? (typeof window !== 'undefined' ? window.innerWidth : 390)
   const h = viewport?.height ?? (typeof window !== 'undefined' ? window.innerHeight : 720)
   if (tight) {
-    return { x: w * 0.2, y: h * 0.14 }
+    return { x: w * 0.1, y: h * 0.07 }
   }
-  return { x: w * 0.26, y: h * 0.22 }
+  return { x: w * 0.22, y: h * 0.17 }
 }
 
 function clampPan(offset: PanPoint, viewport?: DOMRect | null, tight = false): PanPoint {
@@ -36,14 +38,6 @@ function clampPan(offset: PanPoint, viewport?: DOMRect | null, tight = false): P
     x: Math.max(-limits.x, Math.min(limits.x, offset.x)),
     y: Math.max(-limits.y, Math.min(limits.y, offset.y)),
   }
-}
-
-function motionSeedFromId(id: string, index: number) {
-  let hash = index * 1.3
-  for (let i = 0; i < id.length; i += 1) {
-    hash += id.charCodeAt(i) * 0.13
-  }
-  return hash
 }
 
 function realPanelIndex(virtual: number, count: number) {
@@ -91,8 +85,6 @@ export function MissionScenePanels({
   const [transitionEnabled, setTransitionEnabled] = useState(true)
   const [panOffsets, setPanOffsets] = useState<Record<string, PanPoint>>({})
   const [dragging, setDragging] = useState(false)
-  const [pointerTilt, setPointerTilt] = useState({ x: 0, y: 0 })
-  const pointerTiltRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     virtualIndexRef.current = virtualIndex
@@ -112,10 +104,11 @@ export function MissionScenePanels({
       const drag = dragRef.current
       if (!drag.active) return
       const bounds = viewportRef.current?.getBoundingClientRect() ?? null
+      const gain = contentCrop ? PAN_DRAG_GAIN : 1
       const offset = clampPan(
         {
-          x: drag.originX + (event.clientX - drag.startX),
-          y: drag.originY + (event.clientY - drag.startY),
+          x: drag.originX + (event.clientX - drag.startX) * gain,
+          y: drag.originY + (event.clientY - drag.startY) * gain,
         },
         bounds,
         contentCrop,
@@ -218,23 +211,9 @@ export function MissionScenePanels({
     }
   }
 
-  function updatePointerTilt(clientX: number, clientY: number) {
-    if (!contentCrop || dragRef.current.active) return
-    const rect = viewportRef.current?.getBoundingClientRect()
-    if (!rect) return
-    const nx = (clientX - rect.left) / rect.width - 0.5
-    const ny = (clientY - rect.top) / rect.height - 0.5
-    const next = { x: nx * 0.35, y: ny * 0.35 }
-    const prev = pointerTiltRef.current
-    if (Math.abs(prev.x - next.x) < 0.006 && Math.abs(prev.y - next.y) < 0.006) return
-    pointerTiltRef.current = next
-    setPointerTilt(next)
-  }
-
   function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if ((event.target as HTMLElement).closest('.mission-panel-nav')) return
     if (animatingRef.current || jumpingRef.current) return
-    updatePointerTilt(event.clientX, event.clientY)
 
     const panel = looped[virtualIndexRef.current]
     if (!panel) return
@@ -283,11 +262,6 @@ export function MissionScenePanels({
       tabIndex={0}
       onKeyDown={onSceneKeyDown}
       onPointerDown={onPointerDown}
-      onPointerMove={(event) => updatePointerTilt(event.clientX, event.clientY)}
-      onPointerLeave={() => {
-        pointerTiltRef.current = { x: 0, y: 0 }
-        setPointerTilt({ x: 0, y: 0 })
-      }}
       onPointerUp={onPointerUp}
       onPointerCancel={() => {
         dragRef.current.active = false
@@ -318,11 +292,7 @@ export function MissionScenePanels({
                 label={panel.label}
                 offset={panelOffset(panel.id)}
                 baseOffset={contentCrop ? { x: 0, y: -8 } : undefined}
-                zoom={contentCrop ? 1.4 : 1.28}
-                active={index === virtualIndex}
-                subtleDepth={contentCrop}
-                pointer={pointerTilt}
-                motionSeed={motionSeedFromId(panel.id, index)}
+                zoom={contentCrop ? 1.3 : 1.24}
               />
             </div>
           )
