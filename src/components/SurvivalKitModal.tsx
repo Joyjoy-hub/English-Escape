@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 
+import { getAppPortalRoot } from '../appPortal'
+
 import { useGameStore } from '../store/gameStore'
 import { useSettingsStore } from '../store/settingsStore'
 import { ExpressionCard } from './ExpressionCard'
@@ -168,6 +170,6 @@ export function SurvivalKitModal({ isOpen, onClose }: SurvivalKitModalProps) {
         </section>
       </div>
     </div>,
-    document.body,
+    getAppPortalRoot(),
   )
 }

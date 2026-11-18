@@ -1,0 +1,443 @@
+/* 전 화면 16:9 무대 — 오프닝부터 결과까지 동일 비율 */
+
+.app-landscape-root {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100svh;
+  padding:
+    max(8px, env(safe-area-inset-top))
+    max(8px, env(safe-area-inset-right))
+    max(8px, env(safe-area-inset-bottom))
+    max(8px, env(safe-area-inset-left));
+}
+
+.app-landscape-stage {
+  position: relative;
+  isolation: isolate;
+  container-type: size;
+  container-name: landscape;
+  /* fixed HUD·모달을 16:9 무대 안에 묶음 */
+  transform: translateZ(0);
+  aspect-ratio: 16 / 9;
+  width: min(100%, calc((100svh - 16px) * 16 / 9));
+  height: min(calc(100svh - 16px), calc(100vw * 9 / 16));
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(241, 212, 138, 0.28);
+  border-radius: 14px;
+  background: #120c08;
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(232, 198, 122, 0.1);
+}
+
+.app-route-outlet {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.app-route-outlet > * {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+}
+
+/* —— 공통 카드형 페이지 —— */
+.app-landscape-stage .page,
+.app-landscape-stage .result-page,
+.app-landscape-stage .review-note {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+  padding: 12px 18px 14px;
+}
+
+.app-landscape-stage .page h1,
+.app-landscape-stage .result-page h1,
+.app-landscape-stage .review-note h1 {
+  font-size: clamp(18px, 6.5cqh, 24px);
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+
+.app-landscape-stage .nav {
+  margin-top: 10px;
+  gap: 8px;
+}
+
+.app-landscape-stage .nav a {
+  min-height: 42px;
+  padding: 10px 14px;
+}
+
+/* —— 오프닝 —— */
+.app-landscape-stage .title-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(10px, 3cqh, 20px) clamp(16px, 4cqw, 32px);
+}
+
+.app-landscape-stage .title-bg {
+  object-position: center 38%;
+}
+
+.app-landscape-stage .title-main {
+  width: min(100%, 900px);
+  gap: clamp(12px, 2.5cqh, 18px);
+}
+
+.app-landscape-stage .title-screen h1 {
+  font-size: clamp(22px, 8.5cqh, 38px);
+}
+
+.app-landscape-stage .title-slogan {
+  margin-top: 8px;
+  font-size: clamp(13px, 4cqh, 16px);
+}
+
+.app-landscape-stage .title-plaque-inner {
+  padding: 12px 14px 10px;
+}
+
+.app-landscape-stage .title-actions button {
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: clamp(14px, 4cqh, 16px);
+  letter-spacing: 0.16em;
+}
+
+@container landscape (min-width: 520px) {
+  .app-landscape-stage .title-main {
+    flex-direction: row;
+    align-items: stretch;
+    gap: clamp(14px, 3cqw, 24px);
+  }
+
+  .app-landscape-stage .title-plaque {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .app-landscape-stage .title-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: min(220px, 26cqw);
+  }
+}
+
+/* —— 홈(지도) —— */
+.app-landscape-stage .dest-screen {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-landscape-stage .dest-map-scroll {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.app-landscape-stage .dest-map {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: unset;
+}
+
+.app-landscape-stage .dest-top {
+  padding: 10px 14px 0;
+}
+
+.app-landscape-stage .dest-top-copy {
+  max-width: min(320px, 42%);
+  padding: 8px 10px;
+}
+
+.app-landscape-stage .dest-top-copy h1 {
+  font-size: clamp(16px, 5cqh, 20px);
+}
+
+.app-landscape-stage .dest-top-copy p {
+  font-size: 12px;
+}
+
+.app-landscape-stage .dest-panel {
+  right: 12px;
+  bottom: 12px;
+  left: auto;
+  width: min(360px, 42cqw);
+  max-width: none;
+  margin-left: 0;
+  padding: 10px;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.app-landscape-stage .dest-panel-photo {
+  min-height: 72px;
+}
+
+.app-landscape-stage .dest-panel-body h2 {
+  font-size: clamp(16px, 5.5cqh, 22px);
+}
+
+/* —— 장소 선택 —— */
+.app-landscape-stage .place-screen {
+  display: grid;
+  grid-template-columns: minmax(0, 34%) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  padding: 10px 12px;
+  overflow: hidden;
+}
+
+.app-landscape-stage .place-hero {
+  height: 100%;
+  min-height: 0;
+  border-radius: 16px;
+}
+
+.app-landscape-stage .place-hero-copy h1 {
+  font-size: clamp(18px, 6cqh, 26px);
+}
+
+.app-landscape-stage .place-sheet {
+  margin: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 12px;
+  border-radius: 16px;
+}
+
+.app-landscape-stage .place-grid {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.app-landscape-stage .place-card {
+  min-height: 0;
+  padding: 10px;
+}
+
+/* —— 학습 —— */
+.app-landscape-stage .learn-screen {
+  display: grid;
+  grid-template-columns: minmax(0, 36%) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 10px 12px;
+  overflow: hidden;
+}
+
+.app-landscape-stage .learn-hero {
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  border-radius: 16px;
+}
+
+.app-landscape-stage .learn-hero-copy h1 {
+  font-size: clamp(18px, 6cqh, 26px);
+}
+
+.app-landscape-stage .learn-sheet {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 12px 14px;
+  border-radius: 16px;
+}
+
+.app-landscape-stage .learn-sheet .expression-card {
+  margin-top: 8px;
+  padding: 14px 12px;
+}
+
+.app-landscape-stage .learn-sheet .expression-en {
+  font-size: clamp(16px, 5.5cqh, 22px);
+}
+
+.app-landscape-stage .learn-controls {
+  margin-top: 10px;
+}
+
+.app-landscape-stage .learn-start {
+  margin-top: 10px;
+}
+
+/* —— 대화 —— */
+.app-landscape-stage .dialogue-page {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  overflow: hidden;
+}
+
+.app-landscape-stage .dialogue-header {
+  flex-shrink: 0;
+  padding: 8px 12px 0;
+  gap: 8px;
+}
+
+.app-landscape-stage .dialogue-header h1 {
+  font-size: clamp(16px, 5cqh, 20px);
+}
+
+.app-landscape-stage .dialogue-goals {
+  flex-shrink: 0;
+  margin-top: 6px;
+  padding: 0 12px 6px;
+}
+
+.app-landscape-stage .dialogue-chat {
+  flex: 1;
+  min-height: 0;
+  padding: 6px 12px 10px;
+}
+
+.app-landscape-stage .dialogue-composer {
+  flex-shrink: 0;
+  padding: 8px 12px max(8px, env(safe-area-inset-bottom));
+}
+
+.app-landscape-stage .dialogue-kit {
+  max-width: min(200px, 38%);
+  min-height: 40px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+/* —— 탐색 —— */
+.app-landscape-stage .explore-screen {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.app-landscape-stage .explore-screen--gallery {
+  display: block;
+  min-height: 0;
+  height: 100%;
+  padding: 0;
+  background: #0c0805;
+}
+
+.app-landscape-stage .explore-stage-16x9 {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: unset;
+  max-width: none;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.app-landscape-stage .mission-panels-viewport {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+}
+
+.app-landscape-stage .mission-panel-nav {
+  position: absolute;
+}
+
+.app-landscape-stage .explore-screen--point-click {
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.app-landscape-stage .explore-screen--point-click .explore-hud,
+.app-landscape-stage .explore-screen--point-click .explore-vignette {
+  position: absolute;
+}
+
+.app-landscape-stage .explore-screen--point-click .mission-scene,
+.app-landscape-stage .explore-screen--point-click .panorama-viewer {
+  position: absolute;
+  inset: 0;
+}
+
+.app-landscape-stage .explore-screen--point-click .explore-briefing--hud {
+  max-width: min(calc(100% - 24px), 280px);
+}
+
+.app-landscape-stage .explore-screen--point-click .explore-hud {
+  padding-top: 8px;
+}
+
+/* —— 결과·오답노트 카드 —— */
+.app-landscape-stage .review-card {
+  padding: 12px;
+}
+
+@media (max-width: 720px) {
+  .app-landscape-stage {
+    border-radius: 10px;
+  }
+
+  .app-landscape-stage .place-screen,
+  .app-landscape-stage .learn-screen {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .app-landscape-stage .place-hero,
+  .app-landscape-stage .learn-hero {
+    height: clamp(88px, 22cqh, 120px);
+  }
+
+  .app-landscape-stage .place-sheet,
+  .app-landscape-stage .learn-sheet {
+    overflow-y: visible;
+  }
+}

@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 
+import { getAppPortalRoot } from '../appPortal'
+
 import type { CollectedClue } from '../store/gameStore'
 import type { LockHotspot } from '../types/mission'
 import './hotspot-modal.css'
@@ -94,6 +96,6 @@ export function LockModal({ hotspot, clues, onClose, onUnlock }: LockModalProps)
         </div>
       </div>
     </div>,
-    document.body,
+    getAppPortalRoot(),
   )
 }

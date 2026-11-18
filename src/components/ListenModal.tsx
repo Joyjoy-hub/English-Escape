@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
+import { getAppPortalRoot } from '../appPortal'
+
 import type { ClueId, ListenHotspot } from '../types/mission'
 import { QuizHints } from './QuizHints'
 import './hotspot-modal.css'
@@ -106,6 +108,6 @@ export function ListenModal({ hotspot, onClose, onCollect }: ListenModalProps) {
         </div>
       </div>
     </div>,
-    document.body,
+    getAppPortalRoot(),
   )
 }

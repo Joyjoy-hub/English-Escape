@@ -1,5 +1,7 @@
 import { createPortal } from 'react-dom'
 
+import { getAppPortalRoot } from '../../appPortal'
+
 import type { DeparturePuzzle } from '../../types/departureMission'
 import '../hotspot-modal.css'
 import '../../pages/DepartureMissionPage.css'
@@ -53,6 +55,6 @@ export function DeparturePuzzleModal({
         </div>
       </div>
     </div>,
-    document.body,
+    getAppPortalRoot(),
   )
 }

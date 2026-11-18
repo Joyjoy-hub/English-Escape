@@ -1,5 +1,7 @@
 import { createPortal } from 'react-dom'
 
+import { getAppPortalRoot } from '../appPortal'
+
 import { useSettingsStore } from '../store/settingsStore'
 import './ExploreSettingsModal.css'
 
@@ -109,6 +111,6 @@ export function ExploreSettingsModal({ isOpen, onClose, onOpenSurvivalKit }: Exp
         </footer>
       </div>
     </div>,
-    document.body,
+    getAppPortalRoot(),
   )
 }

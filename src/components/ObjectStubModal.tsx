@@ -1,5 +1,7 @@
 import { createPortal } from 'react-dom'
 
+import { getAppPortalRoot } from '../appPortal'
+
 import type { SceneInteractable } from '../types/mission'
 import './hotspot-modal.css'
 
@@ -39,6 +41,6 @@ export function ObjectStubModal({ target, onClose }: ObjectStubModalProps) {
         </button>
       </div>
     </div>,
-    document.body,
+    getAppPortalRoot(),
   )
 }
